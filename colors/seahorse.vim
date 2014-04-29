@@ -21,7 +21,7 @@ let s:blue       = "#2575be"
 let s:red        = "#c03228"
 let s:green      = "#499773"
 let s:purple     = "#bf9efe"
-let s:yellow     = "#d7ac00"
+let s:yellow     = "#c3aa00"
 
 
 exec 'hi! Blue   guifg=' .s:blue
@@ -79,8 +79,14 @@ exec 'hi! SpecialKey'
 
 " Errors
 exec 'hi! Error'
-      \.' guibg=' .s:light_grey
       \.' guifg=' .s:red
+      \.' guibg=' .s:light_grey
+
+
+" Todos
+exec 'hi! Todo'
+      \.' guifg=' .s:black
+      \.' guibg=' .s:yellow
 
 
 " Link lots of things to Normal.
