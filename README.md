@@ -1,4 +1,5 @@
 # Seahorse
 
-A light Vim colorscheme I'm working on. Currently only supports MacVim.
+A light Vim colorscheme, likely a perpetual work in progress.
 
+![](screenshot.png)
