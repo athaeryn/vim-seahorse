@@ -11,111 +11,124 @@ endif
 let colors_name = "seahorse"
 
 
+"|
+"| AddHighlight function
+"|
+function! AddHighlight(name, fg, bg, options)
+  let hi = "hi! ".a:name
+  if strlen(a:fg)
+    let hi = hi." ".s:type."fg=".a:fg
+  endif
+  if strlen(a:bg)
+    let hi = hi." ".s:type."bg=".a:bg
+  endif
+  if strlen(a:options)
+    let hi = hi." ".s:type."=".a:options
+  endif
+  exec hi
+endfunction
+
 
 "|
 "| Color values
 "|
-let s:white      = "#dedede"
-let s:black      = "#333333"
+let s:none = ""
+if has('gui_running')
+  let s:type       = "gui"
+  let s:white      = "#dedede"
+  let s:black      = "#333333"
 
-let s:grey       = "#777777"
-let s:dark_grey  = "#555555"
-let s:light_grey = "#cccccc"
+  let s:grey       = "#777777"
+  let s:dark_grey  = "#555555"
+  let s:light_grey = "#cccccc"
 
-let s:blue       = "#2575be"
-let s:red        = "#c03228"
-let s:green      = "#499773"
-let s:bg_purple  = "#bf9efe"
-let s:fg_purple  = "#9578ce"
-let s:yellow     = "#c3aa00"
+  let s:blue       = "#2575be"
+  let s:red        = "#c03228"
+  let s:green      = "#499773"
+  let s:bg_purple  = "#bf9efe"
+  let s:fg_purple  = "#9578ce"
+  let s:yellow     = "#c3aa00"
+else
+  let s:type       = "cterm"
+  let s:white      = "254"
+  let s:black      = "235"
+
+  let s:grey       = "241" " 241-2
+  let s:dark_grey  = "238"
+  let s:light_grey = "251"
+
+  let s:blue       = "25" " 25
+  let s:red        = "124" " 124 / 88 ?
+  let s:green      = "29" " 23 / 29
+  let s:bg_purple  = "141" " 141 / 147
+  let s:fg_purple  = "93" " 93
+  let s:yellow     = "136" " 136
+endif
 
 
 
 "|
 "| Base highlights
 "|
-exec 'hi! Blue   guifg=' .s:blue
-exec 'hi! Red    guifg=' .s:red
-exec 'hi! Green  guifg=' .s:green
-exec 'hi! Purple guifg=' .s:fg_purple
-exec 'hi! Yellow guifg=' .s:yellow
+call AddHighlight("Blue",   s:blue,      s:white, s:none)
+call AddHighlight("Red",    s:red,       s:white, s:none)
+call AddHighlight("Green",  s:green,     s:white, s:none)
+call AddHighlight("Purple", s:fg_purple, s:white, s:none)
+call AddHighlight("Yellow", s:yellow,    s:white, s:none)
 
-exec 'hi! Grey      guifg=' .s:grey
-exec 'hi! DarkGrey  guifg=' .s:dark_grey
-exec 'hi! LightGrey guifg=' .s:light_grey
+call AddHighlight("Grey",      s:grey,       s:white, s:none)
+call AddHighlight("DarkGrey",  s:dark_grey,  s:white, s:none)
+call AddHighlight("LightGrey", s:light_grey, s:white, s:none)
 
-exec 'hi! Normal'
-      \.' guifg=' .s:black
-      \.' guibg=' .s:white
+call AddHighlight("Normal", s:black, s:white, s:none)
 
 
 
 "|
 "| Backgrounds
 "|
-exec 'hi! BlueBg   guibg=' .s:blue
-exec 'hi! RedBg'
-      \.' guifg=' .s:white
-      \.' guibg=' .s:red
-exec 'hi! GreenBg  guibg=' .s:green
-exec 'hi! PurpleBg'
-      \.' guifg=' .s:black
-      \.' guibg=' .s:bg_purple
-exec 'hi! YellowBg guibg=' .s:yellow
+" exec 'hi! BlueBg   guibg=' .s:blue
+" exec 'hi! RedBg'
+"       \.' guifg=' .s:white
+"       \.' guibg=' .s:red
+" exec 'hi! GreenBg  guibg=' .s:green
+call AddHighlight("PurpleBg", s:black, s:bg_purple, s:none)
+" exec 'hi! YellowBg guibg=' .s:yellow
 
-exec 'hi! GreyBg      guibg=' .s:grey
-exec 'hi! DarkGreyBg  guibg=' .s:dark_grey
-exec 'hi! LightGreyBg guibg=' .s:light_grey
+call AddHighlight("GreyBg", s:none, s:grey, s:none)
+call AddHighlight("DarkGreyBg", s:none, s:dark_grey, s:none)
+call AddHighlight("LightGreyBg", s:none, s:light_grey, s:none)
 
 
 "|
 "| Highlights
 "|
-exec 'hi! LineNr'
-      \.' guifg=' .s:grey
-      \.' guibg=' .s:light_grey
+call AddHighlight("LineNr", s:grey, s:light_grey, s:none)
+call AddHighlight("CursorLineNr", s:green, s:white, s:none)
 
-exec 'hi! CursorLineNr'
-      \.' guifg=' .s:green
-      \.' guibg=' .s:white
+call AddHighlight("Visual", s:white, s:blue, s:none)
 
-exec 'hi! Visual'
-      \.' guifg=' .s:white
-      \.' guibg=' .s:blue
 
 hi! link Search PurpleBg
 hi! link IncSearch Search
 
-exec 'hi! VertSplit'
-      \.' guifg=' .s:light_grey
-      \.' guibg=' .s:grey
+call AddHighlight("VertSplit", s:light_grey, s:grey, s:none)
 
 " ListChars
 hi! link SpecialKey RedBg
 
-" Errors
-exec 'hi! Error'
-      \.' guifg=' .s:red
-      \.' guibg=' .s:light_grey
+call AddHighlight("Error", s:red, s:light_grey, s:none)
 
-" Todos
-exec 'hi! Todo'
-      \.' guifg=' .s:black
-      \.' guibg=' .s:yellow
+call AddHighlight("Todo", s:black, s:yellow, s:none)
 
-" StatusLine
-exec 'hi! StatusLine'
-      \.' guifg=' .s:blue
-      \.' guibg=' .s:white
+call AddHighlight("StatusLine",   s:grey,       s:white, s:none)
+call AddHighlight("StatusLineNC", s:light_grey, s:grey,  s:none)
 
-exec 'hi! StatusLineNC'
-      \.' guifg=' .s:light_grey
-      \.' guibg=' .s:white
-
-" PMenu
-exec 'hi! PMenu'
-      \.' guifg=' .s:grey
-      \.' guibg=' .s:light_grey
+" " PMenu
+" exec 'hi! PMenu'
+"       \.' guifg=' .s:grey
+"       \.' guibg=' .s:light_grey
+call AddHighlight("PMenu", s:grey, s:light_grey, s:none)
 
 
 
@@ -129,9 +142,12 @@ hi! link Noise Grey
 hi! link NonText Grey
 hi! link String  Green
 
-exec 'hi! Title'
-     \.' guifg=' .s:black
-     \.' gui=bold'
+hi! link diffAdded Green
+hi! link diffRemoved Red
+
+call AddHighlight("gitCommitOverflow", s:red, s:none, "undercurl")
+
+call AddHighlight("Title", s:black, s:none, "bold")
 
 
 " Link lots of things to Normal.
@@ -142,3 +158,5 @@ hi! link Constant   Normal
 hi! link PreProc    Normal
 hi! link Special    Normal
 hi! link MatchParen Normal
+
+call AddHighlight("Folded", s:dark_grey, s:light_grey, s:none)
